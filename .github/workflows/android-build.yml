@@ -9,6 +9,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write   # REQUIRED for creating releases
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -25,8 +28,24 @@ jobs:
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      # Find the APK and export path
+      - name: Locate APK
+        id: find_apk
+        run: |
+          APK_PATH=$(find . -path "*build/outputs/apk/debug/*.apk" | head -n 1)
+          echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
+          echo "Found APK at $APK_PATH"
+
+      # Create GitHub Release
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: cloudstream-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          tag_name: debug-${{ github.run_number }}
+          name: Debug Build ${{ github.run_number }}
+          body: |
+            🔧 Debug build generated automatically.
+            Commit: ${{ github.sha }}
+          files: |
+            ${{ steps.find_apk.outputs.apk_path }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
