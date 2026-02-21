@@ -26,13 +26,13 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew assemblePrereleaseDebug
 
       # Find the APK and export path
       - name: Locate APK
         id: find_apk
         run: |
-          APK_PATH=$(find . -path "*build/outputs/apk/debug/*.apk" | head -n 1)
+          APK_PATH=$(find . -path "*build/outputs/apk/prerelease/debug/*.apk" | head -n 1)
           echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
           echo "Found APK at $APK_PATH"
 
