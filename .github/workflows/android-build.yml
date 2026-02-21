@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write   # REQUIRED for creating releases
+      contents: write
 
     steps:
       - name: Checkout repo
@@ -25,18 +25,16 @@ jobs:
       - name: Grant execute permission
         run: chmod +x gradlew
 
-      - name: Build Debug APK
-        run: ./gradlew assemblePrereleaseDebug
+      - name: Build Phone Prerelease Debug APK
+        run: ./gradlew :app:assemblePrereleaseDebug
 
-      # Find the APK and export path
       - name: Locate APK
         id: find_apk
         run: |
-          APK_PATH=$(find . -path "*build/outputs/apk/prerelease/debug/*.apk" | head -n 1)
+          APK_PATH=$(find app/build/outputs/apk -name "*.apk" | head -n 1)
           echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
           echo "Found APK at $APK_PATH"
 
-      # Create GitHub Release
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
@@ -45,7 +43,6 @@ jobs:
           body: |
             🔧 Debug build generated automatically.
             Commit: ${{ github.sha }}
-          files: |
-            ${{ steps.find_apk.outputs.apk_path }}
+          files: ${{ steps.find_apk.outputs.apk_path }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
