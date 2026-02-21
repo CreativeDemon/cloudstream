@@ -59,7 +59,7 @@ android {
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.lagradost.cloudstream3"
+        applicationId = "com.manjitv.app"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 67
@@ -152,7 +152,7 @@ android {
         resValues = true
     }
 
-    namespace = "com.lagradost.cloudstream3"
+    namespace = "com.manjitv.app"
 }
 
 dependencies {

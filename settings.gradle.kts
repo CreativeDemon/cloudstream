@@ -17,5 +17,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "CloudStream"
+rootProject.name = "ManjiTv"
 include(":app", ":library", ":docs")
